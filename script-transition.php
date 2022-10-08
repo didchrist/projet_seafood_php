@@ -1,5 +1,14 @@
 <?php session_start();
-$_POST= filter_input(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$_POST = filter_input_array(INPUT_POST, [
+    'titre-h1' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'titre-h2' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'premier-paragraphe' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'deuxieme-paragraphe' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'troisieme-paragraphe' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'verif-blog' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'validation' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'verif-image' => FILTER_SANITIZE_FULL_SPECIAL_CHARS
+]);
 
 /* reinitialisation de certaine variable état */
 unset($_SESSION['errors-succes']);
@@ -32,7 +41,7 @@ if (file_exists($filename) and isset($_REQUEST['email']) and isset($_REQUEST['pa
 }
 
 /* partie verif pour l'image */
-if(isset($_SERVER['verif-image'])){
+if(isset($_POST['verif-image'])){
     if ($_FILES['image']['error'] ==4) {
         $_SESSION['errors-succes'] = "Veuillez insérer une image valide.";
     }
@@ -55,21 +64,22 @@ if(isset($_SERVER['verif-image'])){
 }
 
 /* initialisation des variables retour input */
-$_SESSION['titre-h1'] = $_SERVER['titre-h1'] ?? "";
-$_SESSION['titre-h2'] = $_SERVER['titre-h2'] ?? "";
-$_SESSION['premier-paragraphe'] = $_SERVER['premier-paragraphe'] ?? "";
-$_SESSION['deuxieme-paragraphe'] = $_SERVER['deuxieme-paragraphe'] ?? "";
-$_SESSION['troisieme-paragraphe'] = $_SERVER['troisieme-paragraphe'] ?? "";
+print_r($_POST);
+$_SESSION['titre-h1'] = $_POST['titre-h1'] ?? "";
+$_SESSION['titre-h2'] = $_POST['titre-h2'] ?? "";
+$_SESSION['premier-paragraphe'] = $_POST['premier-paragraphe'] ?? "";
+$_SESSION['deuxieme-paragraphe'] = $_POST['deuxieme-paragraphe'] ?? "";
+$_SESSION['troisieme-paragraphe'] = $_POST['troisieme-paragraphe'] ?? "";
 
 /* partie verif affichage visualition et validation de la page */
-if(isset($_SERVER['verif-blog']) and file_exists($_SESSION['image-chemin'])) {
+if(isset($_POST['verif-blog']) and file_exists($_SESSION['image-chemin'])) {
     $_SESSION['retour-blog'] = true;
     header('Location: ./index.php#visualisation');
 }
-elseif (isset($_SERVER['verif-blog'])) {
+elseif (isset($_POST['verif-blog'])) {
     $_SESSION['errors-succes'] = "Veuillez insérer une image valide.";
     header('Location: ./index.php#form');
 }
-if (isset($_SERVER['validation'])) {
+if (isset($_POST['validation'])) {
     header('Location: ./blogsingle.php');
 }

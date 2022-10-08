@@ -1,5 +1,11 @@
 <?php session_start();
-$_POST= filter_input(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$_POST = filter_input_array(INPUT_POST, [
+    'titre-h1' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'titre-h2' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'premier-paragraphe' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'deuxieme-paragraphe' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'troisieme-paragraphe' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+]);
 /* Initialisation des variables mémoire pour les champ de création d'article */
 if (isset($_SESSION['premier-paragraphe'])){
     $premier_Paragraphe = $_SESSION['premier-paragraphe'];
